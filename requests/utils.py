@@ -343,8 +343,10 @@ def get_encoding_from_headers(headers):
     if 'charset' in params:
         return params['charset'].strip("'\"")
 
-    if 'text' in content_type:
-        return 'ISO-8859-1'
+    # HTTP 1.1 specifies ISO-8859-1 as default encoding, but in practice
+    # the encoding is often a different one, which has erroneously been
+    # left unspecified. Hence, chardet is more reliable.
+    # http://www.w3.org/International/O-HTTP-charset.en.php#charset
 
 
 def stream_decode_response_unicode(iterator, r):
